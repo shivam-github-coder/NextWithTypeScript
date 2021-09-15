@@ -1,0 +1,1 @@
+web:node .next/server/webpack-runtime.js
