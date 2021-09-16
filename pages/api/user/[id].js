@@ -1,22 +1,27 @@
-import {  item } from "../../../data/DataArray";
+import { isTryStatement } from "typescript";
+// import {  item } from "../../../data/DataArray";
+import dbConnect from "../../../utils/dbConnect";
+import Note from '../../../models/Note'
 
-
-export default function handler(req, res) {
-    const {id,text} = req.query
-    if(req.method === 'GET')
-    {
-        res.status(200).json(item)
-    }
-   else if(req.method === 'DELETE')
-    {
-        // console.log("haga",newId)
-        const deletetext = item.find(e => e.id === parseInt(id))
-
-        const index = item.findIndex(e => e.id === parseInt(id))
-        
-        item.splice(index,1)
-        // console.log("index ",arr)
-
-        res.status(200).json(deletetext)
+export default async function handler (req, res) {
+    const DeleteId = req.query;
+    const { method } = req
+  
+    await dbConnect()
+  
+    switch (method) {
+      case 'DELETE':
+        try {
+        //   const user = await Note.create(req.body)
+          const user = await Note.findByIdAndRemove({_id: DeleteId.id});
+          res.status(201).json({ success: true, data: user })
+        } catch (error) {
+            console.log(error.message   )
+          res.status(400).json({ success: false })
+        }
+        break
+      default:
+        res.status(400).json({ success: false })
+        break
     }
   }

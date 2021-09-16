@@ -1,36 +1,45 @@
 import { isTryStatement } from "typescript";
-import {  item } from "../../../data/DataArray";
+// import {  item } from "../../../data/DataArray";
+import dbConnect from "../../../utils/dbConnect";
+import Note from '../../../models/Note'
 
-
-export default function handler(req, res) {
-    if(req.method === 'GET')
-    {
-        res.status(200).json(item)
-    }
-    else if(req.method === 'POST')
-    {
-        const newdata = req.body;
-        console.log("shivam :",newdata)
-    
-        const newDataEnter = ({
-            id:newdata.id,
-            text:newdata.Comment
-        })
-        item.push(newDataEnter)
-        res.status(201).json(newDataEnter)
-    }else if(req.method === 'PUT')
-    {
-        const {id,Comment} = req.body;
-
-        const index = item.findIndex(e => e.id === parseInt(id))
-        
-        item.map((elem,i) =>{
-            if(i === index)
-            {
-                return item.splice(index, 1, {id:parseInt(id),text:Comment});
-                // return {id:parseInt(id),text:Comment}
-            }
-        })
-        res.status(201).json({msg:"Good Job"})
+export default async function handler (req, res) {
+    const DeleteId = req.query;
+    const { method } = req
+  
+    await dbConnect()
+  
+    switch (method) {
+      case 'GET':
+        try {
+          const users = await Note.find({})
+          res.json({ success: true, data: users })
+        } catch (error) {
+            console.log(error.message   )
+          res.status(400).json({ success: false})
+        }
+        break
+      case 'POST':
+        try {
+          const user = await Note.create(req.body)
+          res.status(201).json({ success: true, data: user })
+        } catch (error) {
+            console.log(error.message   )
+          res.status(400).json({ success: false })
+        }
+        break
+      case 'PUT':
+        try {
+        //   const user = await Note.create(req.body)
+          const user = await Note.findOneAndUpdate({id : req.body.id}, req.body)
+          res.status(201).json({ success: true, data: user })
+        } catch (error) {
+            console.log(error.message   )
+          res.status(400).json({ success: false })
+        }
+        break
+      default:
+        res.status(400).json({ success: false })
+        break
     }
   }

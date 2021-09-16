@@ -27,7 +27,8 @@ export const Cards: React.FC = () => {
   const GetData = async () => {
     await axios.get('/api/user')
     .then(function (response:any) {
-      setdata(response.data);
+      console.log(response.data);
+      setdata(response.data.data);
     })
   }
   // Math.floor(Math.random()*1000000))
@@ -42,7 +43,7 @@ export const Cards: React.FC = () => {
 
   const handleSubmit = async (textdatas:any) => {
       console.log("textdata :",textdatas)
-      await axios.post('/api/user', {id:( textdatas.id ? textdatas.id : Math.floor(Math.random()*1000000) ) ,Comment:textdatas.text})
+      await axios.post('/api/user', {id:( textdatas.id ? textdatas.id : Math.floor(Math.random()*1000000) ) ,text:textdatas.text})
       GetData()
       settextdata({id:0,text:''})
       setModel(0)
@@ -52,7 +53,7 @@ export const Cards: React.FC = () => {
 
   const handleUpdateData = async (textdatas:any) => {
       console.log("textdata :",textdatas)
-      await axios.put('/api/user', {id:( textdatas.id ? textdatas.id : Math.floor(Math.random()*1000000) ) ,Comment:textdatas.text})
+      await axios.put('/api/user', {id:( textdatas.id ? textdatas.id : Math.floor(Math.random()*1000000) ) ,text:textdatas.text})
       GetData()
       setUpdataData({id:'',text:''})
       setModel(0)
@@ -101,10 +102,10 @@ export const Cards: React.FC = () => {
           
           (data?.length > 0)
           ?
-          data.map(({text,id}:any) => <div key={id}  className={(id != modal) ? ' flex items-center border-4  p-3 rounded-full mb-3  ': 'hover:shadow-lg  border-red-400 flex items-center border-4  p-3 rounded-full mb-3 '}  >
+          data.map(({text,id,_id}:any) => <div key={id}  className={(id != modal) ? ' flex items-center border-4  p-3 rounded-full mb-3  ': 'hover:shadow-lg  border-red-400 flex items-center border-4  p-3 rounded-full mb-3 '}  >
           <PencilAltIcon onClick={() => handleUpdate(id)} className='transition duration-150 hover:scale-150  transform  h-10 mr-4 cursor-pointer border-red-400 border-4 rounded-full p-1 ' />
           <li key={id} className='text-3xl'>{(id === modal) ? <> <input type='text' onKeyDown={e => (e.key === 'Enter' && handleUpdateData(updateData) )} value={updateData.text}  onChange={e => setUpdataData({...updateData,text:e.target.value}) } /> </>: <> {text} </>}</li>
-          <XCircleIcon onClick={() => HandleDelete(id)}  className='transition duration-150 hover:scale-150 transform  h-10 ml-4 border-red-400 border-4 rounded-full cursor-pointer p-1' />
+          <XCircleIcon onClick={() => HandleDelete(_id)}  className='transition duration-150 hover:scale-150 transform  h-10 ml-4 border-red-400 border-4 rounded-full cursor-pointer p-1' />
         </div>
           )
           :
