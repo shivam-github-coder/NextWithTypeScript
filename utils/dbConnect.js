@@ -5,7 +5,7 @@ Source :
 https://github.com/vercel/next.js/blob/canary/examples/with-mongodb-mongoose/utils/dbConnect.js 
 **/
 
-const MONGODB_URI = process.env.MONGO_URL 
+const MONGODB_URI = process.env.MONGO_URL || "mongodb+srv://Shivamkumar:Shivamkumar@cluster0.ytkxd.gcp.mongodb.net/Project0?retryWrites=true&w=majority"
 
 
 if (!MONGODB_URI) {
