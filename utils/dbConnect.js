@@ -5,8 +5,8 @@ Source :
 https://github.com/vercel/next.js/blob/canary/examples/with-mongodb-mongoose/utils/dbConnect.js 
 **/
 
-const MONGODB_URI = process.env.MONGO_URL || "mongodb+srv://Shivamkumar:Shivamkumar@cluster0.ytkxd.gcp.mongodb.net/Project0?retryWrites=true&w=majority"
 
+const MONGODB_URI = "mongodb+srv://Shivamkumar:Shivamkumar@cluster0.ytkxd.gcp.mongodb.net/Project0?retryWrites=true&w=majority"
 
 if (!MONGODB_URI) {
   throw new Error(
@@ -32,12 +32,9 @@ async function dbConnect () {
 
   if (!cached.promise) {
     const opts = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      bufferCommands: false,
-      bufferMaxEntries: 0,
-      useFindAndModify: true,
-      useCreateIndex: true
+        useNewUrlParser: true, 
+
+        useUnifiedTopology: true 
     }
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then(mongoose => {
@@ -49,4 +46,3 @@ async function dbConnect () {
 }
 
 export default dbConnect
-
